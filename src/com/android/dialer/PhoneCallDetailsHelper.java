@@ -18,7 +18,7 @@
 package com.android.dialer;
 
 import android.content.res.Resources;
-import android.kylin.location.PhoneLocation;
+import android.suda.location.PhoneLocation;
 import android.suda.utils.SudaUtils;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
