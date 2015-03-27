@@ -22,6 +22,8 @@ import android.graphics.drawable.Drawable;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.suda.location.PhoneLocation;
+import android.suda.utils.SudaUtils;
 import android.telephony.SubscriptionManager;
 import android.graphics.Typeface;
 import android.telecom.PhoneAccount;
@@ -217,11 +219,15 @@ public class PhoneCallDetailsHelper {
                 && !mPhoneNumberUtilsWrapper.isVoicemailNumber(details.accountHandle,
                         details.number)) {
 
+            CharSequence locationLabel = SudaUtils.isSupportLanguage(true) ? PhoneLocation.getCityFromPhone(details.number) : details.geocode;
             if (details.numberLabel == ContactInfo.GEOCODE_AS_LABEL) {
-                numberFormattedLabel = details.geocode;
+                numberFormattedLabel = locationLabel;
             } else {
                 numberFormattedLabel = Phone.getTypeLabel(mResources, details.numberType,
                         details.numberLabel);
+                if (!TextUtils.isEmpty(locationLabel)) {
+                    numberFormattedLabel = numberFormattedLabel + mResources.getString(R.string.list_delimeter) + locationLabel;               
+                }
             }
         }
 
