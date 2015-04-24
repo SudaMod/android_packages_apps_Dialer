@@ -24,6 +24,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.services.callrecorder.common.CallRecording;
@@ -209,6 +210,10 @@ public class CallRecorderService extends Service {
         } else {
             return number + "_" + timestamp + ".m4a ";
         }
+        if (TextUtils.isEmpty(number)) {
+            number = "unknown";
+        }
+        return number + "_" + timestamp + ".amr";
     }
 
     public static boolean isEnabled(Context context) {
