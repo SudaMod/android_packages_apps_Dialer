@@ -205,15 +205,14 @@ public class CallRecorderService extends Service {
     private String generateFilename(String number) {
         String timestamp = DATE_FORMAT.format(new Date());
         int audioFormat = getAudioFormat();
+        if (TextUtils.isEmpty(number)) {
+            number = "unknown";
+        }
         if (audioFormat == MediaRecorder.OutputFormat.AMR_NB){
             return number + "_" + timestamp + ".amr";
         } else {
             return number + "_" + timestamp + ".m4a ";
         }
-        if (TextUtils.isEmpty(number)) {
-            number = "unknown";
-        }
-        return number + "_" + timestamp + ".amr";
     }
 
     public static boolean isEnabled(Context context) {
