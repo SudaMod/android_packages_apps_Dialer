@@ -219,7 +219,7 @@ public class PhoneCallDetailsHelper {
                 && !mPhoneNumberUtilsWrapper.isVoicemailNumber(details.accountHandle,
                         details.number)) {
 
-            CharSequence locationLabel = SudaUtils.isSupportLanguage(true) ? PhoneLocation.getCityFromPhone(details.number) : details.geocode;
+            CharSequence locationLabel = SudaUtils.isSupportLanguage(true) ? PhoneLocation.getCityFromPhone(details.number.toString()) : details.geocode;
             if (details.numberLabel == ContactInfo.GEOCODE_AS_LABEL) {
                 numberFormattedLabel = locationLabel;
             } else {
