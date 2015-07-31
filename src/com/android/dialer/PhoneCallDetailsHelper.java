@@ -33,6 +33,10 @@ import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.a1os.cloud.phone.PhoneUtil;
+import com.a1os.cloud.phone.PhoneUtil.CallBack;
+
+
 import com.android.contacts.common.CallUtil;
 import com.android.contacts.common.format.TextHighlighter;
 import com.android.contacts.common.testing.NeededForTesting;
@@ -62,6 +66,7 @@ public class PhoneCallDetailsHelper {
     private final PhoneNumberDisplayHelper mPhoneNumberHelper;
     private final PhoneNumberUtilsWrapper mPhoneNumberUtilsWrapper;
     private final TextHighlighter mHighlighter;
+    private PhoneUtil mPu;
 
     /**
      * List of items to be concatenated together for accessibility descriptions
@@ -78,6 +83,7 @@ public class PhoneCallDetailsHelper {
     public PhoneCallDetailsHelper(Context context, Resources resources,
             PhoneNumberUtilsWrapper phoneUtils) {
         mContext = context;
+        mPu = new PhoneUtil(context);
         mResources = resources;
         mPhoneNumberUtilsWrapper = phoneUtils;
         mPhoneNumberHelper = new PhoneNumberDisplayHelper(context, resources, phoneUtils);
@@ -200,17 +206,22 @@ public class PhoneCallDetailsHelper {
      * @param details Call details to use.
      * @return Type of call (mobile/home) if known, or the location of the caller (if known).
      */
-    public CharSequence getCallTypeOrLocation(PhoneCallDetails details) {
+    public CharSequence getCallTypeOrLocation(final PhoneCallDetails details) {
         CharSequence numberFormattedLabel = null;
         // Only show a label if the number is shown and it is not a SIP address.
         if (!TextUtils.isEmpty(details.number)
                 && !PhoneNumberHelper.isUriNumber(details.number.toString())
                 && !mPhoneNumberUtilsWrapper.isVoicemailNumber(details.accountHandle,
                         details.number)) {
-
-            CharSequence locationLabel = SudaUtils.isSupportLanguage(true) ? PhoneLocation.getCityFromPhone(details.number.toString()) : details.geocode;
+            final StringBuilder locationLabel =new StringBuilder();
+            mPu.getNumberInfo(details.number.toString(), new CallBack() {
+                    public void execute(String response) {
+                        locationLabel.append(SudaUtils.isSupportLanguage(true) ? response : details.geocode);
+                    }
+                }
+            );
             if (details.numberLabel == ContactInfo.GEOCODE_AS_LABEL) {
-                numberFormattedLabel = locationLabel;
+                numberFormattedLabel = locationLabel.toString();
             } else {
                 numberFormattedLabel = Phone.getTypeLabel(mResources, details.numberType,
                         details.numberLabel);

@@ -43,7 +43,8 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
     android-ex-variablespeed \
     libphonenumber \
     libgeocoding \
-    libSudaPinYin
+    libSudaPinYin \
+    libSudaLocation
 
 LOCAL_REQUIRED_MODULES := libvariablespeed
 
