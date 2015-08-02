@@ -21,17 +21,25 @@ import android.app.Application;
 import com.android.contacts.common.ContactPhotoManager;
 import com.android.contacts.common.extensions.ExtensionsFactory;
 import com.android.contacts.commonbind.analytics.AnalyticsUtil;
+import com.a1os.cloud.phone.PhoneUtil;
 
 public class DialerApplication extends Application {
 
     private ContactPhotoManager mContactPhotoManager;
+    private static PhoneUtil mPu;
 
     @Override
     public void onCreate() {
         super.onCreate();
         ExtensionsFactory.init(getApplicationContext());
         AnalyticsUtil.initialize(this);
+        mPu = new PhoneUtil(this);
     }
+
+    public static PhoneUtil getPhoneUtil() {
+        return mPu;
+    }
+
 
     @Override
     public Object getSystemService(String name) {

@@ -33,9 +33,7 @@ import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.a1os.cloud.phone.PhoneUtil;
 import com.a1os.cloud.phone.PhoneUtil.CallBack;
-
 
 import com.android.contacts.common.CallUtil;
 import com.android.contacts.common.format.TextHighlighter;
@@ -66,7 +64,6 @@ public class PhoneCallDetailsHelper {
     private final PhoneNumberDisplayHelper mPhoneNumberHelper;
     private final PhoneNumberUtilsWrapper mPhoneNumberUtilsWrapper;
     private final TextHighlighter mHighlighter;
-    private PhoneUtil mPu;
 
     /**
      * List of items to be concatenated together for accessibility descriptions
@@ -83,7 +80,6 @@ public class PhoneCallDetailsHelper {
     public PhoneCallDetailsHelper(Context context, Resources resources,
             PhoneNumberUtilsWrapper phoneUtils) {
         mContext = context;
-        mPu = new PhoneUtil(context);
         mResources = resources;
         mPhoneNumberUtilsWrapper = phoneUtils;
         mPhoneNumberHelper = new PhoneNumberDisplayHelper(context, resources, phoneUtils);
@@ -214,7 +210,7 @@ public class PhoneCallDetailsHelper {
                 && !mPhoneNumberUtilsWrapper.isVoicemailNumber(details.accountHandle,
                         details.number)) {
             final StringBuilder locationLabel =new StringBuilder();
-            mPu.getNumberInfo(details.number.toString(), new CallBack() {
+            DialerApplication.getPhoneUtil().getNumberInfo(details.number.toString(), new CallBack() {
                     public void execute(String response) {
                         locationLabel.append(SudaUtils.isSupportLanguage(true) ? response : details.geocode);
                     }
