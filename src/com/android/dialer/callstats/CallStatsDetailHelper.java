@@ -29,6 +29,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import android.suda.utils.SudaUtils;
+
 import com.android.dialer.R;
 import com.android.dialer.calllog.CallLogQueryHandler;
 import com.android.dialer.calllog.PhoneNumberDisplayHelper;
@@ -84,7 +86,7 @@ public class CallStatsDetailHelper {
             labelText = null;
         } else {
             nameText = details.name;
-            numberText = displayNumber;
+            numberText = SudaUtils.isSupportLanguage(true) ? TextUtils.isEmpty(details.geocode) ? displayNumber : displayNumber + " " + details.geocode : displayNumber;
             labelText = numberFormattedLabel;
         }
 

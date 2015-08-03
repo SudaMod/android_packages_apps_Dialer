@@ -19,11 +19,10 @@ package com.android.dialer;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.suda.utils.SudaUtils;
 import android.provider.CallLog;
 import android.provider.CallLog.Calls;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.suda.location.PhoneLocation;
-import android.suda.utils.SudaUtils;
 import android.telephony.SubscriptionManager;
 import android.graphics.Typeface;
 import android.telecom.PhoneAccount;
@@ -32,8 +31,6 @@ import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
-
-import com.a1os.cloud.phone.PhoneUtil.CallBack;
 
 import com.android.contacts.common.CallUtil;
 import com.android.contacts.common.format.TextHighlighter;
@@ -202,27 +199,21 @@ public class PhoneCallDetailsHelper {
      * @param details Call details to use.
      * @return Type of call (mobile/home) if known, or the location of the caller (if known).
      */
-    public CharSequence getCallTypeOrLocation(final PhoneCallDetails details) {
+    public CharSequence getCallTypeOrLocation(PhoneCallDetails details) {
         CharSequence numberFormattedLabel = null;
         // Only show a label if the number is shown and it is not a SIP address.
         if (!TextUtils.isEmpty(details.number)
                 && !PhoneNumberHelper.isUriNumber(details.number.toString())
                 && !mPhoneNumberUtilsWrapper.isVoicemailNumber(details.accountHandle,
                         details.number)) {
-            final StringBuilder locationLabel =new StringBuilder();
-            DialerApplication.getPhoneUtil().getNumberInfo(details.number.toString(), new CallBack() {
-                    public void execute(String response) {
-                        locationLabel.append(SudaUtils.isSupportLanguage(true) ? response : details.geocode);
-                    }
-                }
-            );
+
             if (details.numberLabel == ContactInfo.GEOCODE_AS_LABEL) {
-                numberFormattedLabel = locationLabel.toString();
+                numberFormattedLabel = details.geocode;
             } else {
                 numberFormattedLabel = Phone.getTypeLabel(mResources, details.numberType,
                         details.numberLabel);
-                if (!TextUtils.isEmpty(locationLabel)) {
-                    numberFormattedLabel = numberFormattedLabel + mResources.getString(R.string.list_delimeter) + locationLabel;               
+                if (!TextUtils.isEmpty(details.geocode) && SudaUtils.isSupportLanguage(true)) {
+                    numberFormattedLabel = numberFormattedLabel + mResources.getString(R.string.list_delimeter) + details.geocode;
                 }
             }
         }
