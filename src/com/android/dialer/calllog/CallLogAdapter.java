@@ -69,7 +69,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import com.android.dialer.DialerApplication;
-import com.a1os.cloud.phone.PhoneUtil.CallBack;
 import android.suda.utils.SudaUtils;
 
 /**
@@ -436,15 +435,7 @@ public class CallLogAdapter extends GroupingListAdapter
         CharSequence formattedNumber = info.formattedNumber == null
                 ? null : PhoneNumberUtils.ttsSpanAsPhoneNumber(info.formattedNumber);
         final int[] callTypes = getCallTypes(c, count);
-        final StringBuilder location = new StringBuilder();
-        DialerApplication.getPhoneUtil().getNumberInfo(number, new CallBack() {
-            public void execute(String response) {
-                location.append(SudaUtils.isSupportLanguage(true) ? response : "");
-                }
-            }
-        );
-
-        final String geocode = location.toString();
+        final String geocode = DialerApplication.getPhoneUtil().getLocalNumberInfo(number);
         final int sourceType = info.sourceType;
         final int features = getCallFeatures(c, count);
         final String transcription = c.getString(CallLogQuery.TRANSCRIPTION);
