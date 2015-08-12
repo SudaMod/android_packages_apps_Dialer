@@ -80,7 +80,6 @@ import java.util.List;
 
 import com.android.dialer.DialerApplication;
 
-
 /**
  * Displays the details of a specific call log entry.
  * <p>
