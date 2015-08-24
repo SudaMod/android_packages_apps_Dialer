@@ -78,7 +78,7 @@ import com.android.services.callrecorder.CallRecordingDataStore;
 
 import java.util.List;
 
-import com.android.dialer.DialerApplication;
+import com.a1os.cloud.phone.PhoneUtil;
 
 /**
  * Displays the details of a specific call log entry.
@@ -521,7 +521,7 @@ public class CallDetailActivity extends Activity implements ProximitySensorAware
             final long duration = callCursor.getLong(DURATION_COLUMN_INDEX);
             final int callType = callCursor.getInt(CALL_TYPE_COLUMN_INDEX);
             String countryIso = callCursor.getString(COUNTRY_ISO_COLUMN_INDEX);
-            final String geocode = DialerApplication.getPhoneUtil().getLocalNumberInfo(number);
+            final String geocode = PhoneUtil.getPhoneUtil(this).getLocalNumberInfo(number);
             final String transcription = callCursor.getString(TRANSCRIPTION_COLUMN_INDEX);
             final int durationType = callCursor.getInt(DURATION_TYPE_COLUMN_INDEX);
 

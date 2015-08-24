@@ -26,20 +26,14 @@ import com.a1os.cloud.phone.PhoneUtil;
 public class DialerApplication extends Application {
 
     private ContactPhotoManager mContactPhotoManager;
-    private static PhoneUtil mPu;
 
     @Override
     public void onCreate() {
         super.onCreate();
         ExtensionsFactory.init(getApplicationContext());
         AnalyticsUtil.initialize(this);
-        mPu = new PhoneUtil(this);
+        PhoneUtil.getPhoneUtil(this);
     }
-
-    public static PhoneUtil getPhoneUtil() {
-        return mPu;
-    }
-
 
     @Override
     public Object getSystemService(String name) {

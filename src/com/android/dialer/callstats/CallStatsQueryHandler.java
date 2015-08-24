@@ -42,8 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.android.dialer.DialerApplication;
-
+import com.a1os.cloud.phone.PhoneUtil;
 
 /**
  * Class to handle call-log queries, optionally with a date-range filter
@@ -185,7 +184,7 @@ public class CallStatsQueryHandler extends AsyncQueryHandler {
                 final long date = cursor.getLong(CallStatsQuery.DATE);
                 final int numberPresentation = cursor.getInt(CallStatsQuery.NUMBER_PRESENTATION);
                 final String countryIso = cursor.getString(CallStatsQuery.COUNTRY_ISO);
-                final String geocode = DialerApplication.getPhoneUtil().getLocalNumberInfo(number);
+                final String geocode = PhoneUtil.getPhoneUtil(null).getLocalNumberInfo(number);
                 final ContactInfo info = getContactInfoFromCallStats(cursor);
 
                 pending = new CallStatsDetails(number, numberPresentation,
