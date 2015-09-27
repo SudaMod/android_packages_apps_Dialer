@@ -37,6 +37,7 @@ public class MiniMarkActivity extends Activity implements AdapterView.OnItemClic
     private EditText btnMarkNumberEdit;
     private ListView lvMarkList;
     private String phoneNumber;
+    private static CallBack mCallBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +59,13 @@ public class MiniMarkActivity extends Activity implements AdapterView.OnItemClic
         tvMarkNumber.setText(String.format(getString(R.string.cloud_location_lookup_mark_title), phoneNumber));
     }
 
+    public static void setCallBack(CallBack callback){
+        mCallBack = callback;
+    }
+
     public void updateUserMarkInfo(String number, String userMark, int phoneType) {
         PhoneUtil.getPhoneUtil(this).customMark(number, userMark, phoneType);
+        mCallBack.updateView();
         finish();
     }
 
@@ -77,4 +83,9 @@ public class MiniMarkActivity extends Activity implements AdapterView.OnItemClic
         int value[] = getResources().getIntArray(R.array.cloud_location_lookup_mark_values);
         updateUserMarkInfo(phoneNumber, parent.getItemAtPosition(position).toString(), value[position]);
     }
+
+    public interface CallBack {
+        public void updateView() ;
+    }
+
 }

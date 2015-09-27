@@ -76,7 +76,7 @@ import android.suda.utils.SudaUtils;
  * Adapter class to fill in data for the Call Log.
  */
 public class CallLogAdapter extends GroupingListAdapter
-        implements CallLogAdapterHelper.Callback, CallLogGroupBuilder.GroupCreator {
+        implements CallLogAdapterHelper.Callback, CallLogGroupBuilder.GroupCreator, MiniMarkActivity.CallBack {
     private static final String TAG = CallLogAdapter.class.getSimpleName();
 
     private static final int VOICEMAIL_TRANSCRIPTION_MAX_LINES = 10;
@@ -225,6 +225,11 @@ public class CallLogAdapter extends GroupingListAdapter
         }
     }
 
+    @Override
+    public void updateView() {
+        this.notifyDataSetChanged();
+    }
+
     public CallLogAdapter(Context context, CallFetcher callFetcher,
             ContactInfoHelper contactInfoHelper, CallItemExpandedListener callItemExpandedListener,
             OnReportButtonClickListener onReportButtonClickListener, boolean isCallLog) {
@@ -235,6 +240,8 @@ public class CallLogAdapter extends GroupingListAdapter
         mContactInfoHelper = contactInfoHelper;
         mIsCallLog = isCallLog;
         mCallItemExpandedListener = callItemExpandedListener;
+
+        MiniMarkActivity.setCallBack(this);
 
         mOnReportButtonClickListener = onReportButtonClickListener;
         mReportedToast = Toast.makeText(mContext, R.string.toast_caller_id_reported,
