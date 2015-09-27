@@ -30,4 +30,26 @@
         <item>0</item>
     </string-array>
 
+    <string-array name="cloud_location_lookup_mark_entries" translatable="false">
+        <item>@string/cloud_location_lookup_mark_harassment</item>
+        <item>@string/cloud_location_lookup_mark_fraud</item>
+        <item>@string/cloud_location_lookup_mark_advertisement</item>
+        <item>@string/cloud_location_lookup_mark_agency</item>
+        <item>@string/cloud_location_lookup_mark_takeaway</item>
+        <item>@string/cloud_location_lookup_mark_delivery</item>
+        <item>@string/cloud_location_lookup_mark_service</item>
+        <item>@string/cloud_location_lookup_mark_taxi</item>
+    </string-array>
+
+    <integer-array name="cloud_location_lookup_mark_values" translatable="false">
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+    </integer-array>
+
 </resources>
