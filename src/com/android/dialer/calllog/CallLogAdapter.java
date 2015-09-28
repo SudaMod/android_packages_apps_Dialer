@@ -241,8 +241,6 @@ public class CallLogAdapter extends GroupingListAdapter
         mIsCallLog = isCallLog;
         mCallItemExpandedListener = callItemExpandedListener;
 
-        MiniMarkActivity.setCallBack(this);
-
         mOnReportButtonClickListener = onReportButtonClickListener;
         mReportedToast = Toast.makeText(mContext, R.string.toast_caller_id_reported,
                 Toast.LENGTH_SHORT);
@@ -767,6 +765,7 @@ public class CallLogAdapter extends GroupingListAdapter
             views.usermarkButtonView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    MiniMarkActivity.setCallBack(CallLogAdapter.this);
                     Intent intent = new Intent(mContext, MiniMarkActivity.class);
                     intent.putExtra("number", views.number);
                     DialerUtils.startActivityWithErrorToast(mContext, intent);
