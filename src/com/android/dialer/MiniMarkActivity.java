@@ -28,6 +28,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import android.util.Log;
+
 import com.a1os.cloud.phone.PhoneUtil;
 
 
@@ -37,7 +43,8 @@ public class MiniMarkActivity extends Activity implements AdapterView.OnItemClic
     private EditText btnMarkNumberEdit;
     private ListView lvMarkList;
     private String phoneNumber;
-    private static CallBack mCallBack;
+    private static Map<String,CallBack> mCallBackMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +66,21 @@ public class MiniMarkActivity extends Activity implements AdapterView.OnItemClic
         tvMarkNumber.setText(String.format(getString(R.string.cloud_location_lookup_mark_title), phoneNumber));
     }
 
-    public static void setCallBack(CallBack callback){
-        mCallBack = callback;
+    public static void setCallBack(String clzName, CallBack callback){
+        if(mCallBackMap == null)
+            mCallBackMap = new HashMap<String, CallBack>();
+        mCallBackMap.put(clzName, callback);
     }
 
     public void updateUserMarkInfo(String number, String userMark, int phoneType) {
         PhoneUtil.getPhoneUtil(this).customMark(number, userMark, phoneType);
-        mCallBack.updateView();
+
+        Log.d("mCallBackMap.size()", mCallBackMap.size()+"");
+        Iterator<Map.Entry<String, CallBack>> iterator = mCallBackMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, CallBack> entry = iterator.next();
+            ((CallBack) entry.getValue()).updateView();
+        }
         finish();
     }
 
@@ -85,7 +100,7 @@ public class MiniMarkActivity extends Activity implements AdapterView.OnItemClic
     }
 
     public interface CallBack {
-        public void updateView() ;
+        public void updateView();
     }
 
 }

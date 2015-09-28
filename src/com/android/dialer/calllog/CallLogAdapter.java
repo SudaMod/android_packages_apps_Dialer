@@ -235,6 +235,7 @@ public class CallLogAdapter extends GroupingListAdapter
             OnReportButtonClickListener onReportButtonClickListener, boolean isCallLog) {
         super(context);
 
+        MiniMarkActivity.setCallBack(context.getClass().toString(), CallLogAdapter.this);
         mContext = context;
         mCallFetcher = callFetcher;
         mContactInfoHelper = contactInfoHelper;
@@ -765,7 +766,7 @@ public class CallLogAdapter extends GroupingListAdapter
             views.usermarkButtonView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MiniMarkActivity.setCallBack(CallLogAdapter.this);
+                    MiniMarkActivity.setCallBack(mContext.getClass().toString(), CallLogAdapter.this);
                     Intent intent = new Intent(mContext, MiniMarkActivity.class);
                     intent.putExtra("number", views.number);
                     DialerUtils.startActivityWithErrorToast(mContext, intent);
