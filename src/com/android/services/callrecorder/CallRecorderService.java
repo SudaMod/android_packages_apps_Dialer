@@ -107,7 +107,7 @@ public class CallRecorderService extends Service {
         int formatValue =  Settings.System.getInt(
                 getContentResolver(), Settings.System.CALL_RECORDING_FORMAT, mDefaultEncoder);
         if (formatValue == 0){
-            return MediaRecorder.OutputFormat.AMR_WB;
+            return MediaRecorder.OutputFormat.AMR_NB;
         } else {
             return MediaRecorder.OutputFormat.MPEG_4;
         }
@@ -117,7 +117,7 @@ public class CallRecorderService extends Service {
         int formatValue =  Settings.System.getInt(
                 getContentResolver(), Settings.System.CALL_RECORDING_FORMAT, mDefaultEncoder);
         if (formatValue == 0){
-            return MediaRecorder.AudioEncoder.AMR_WB;
+            return MediaRecorder.AudioEncoder.AMR_NB;
         } else {
             return MediaRecorder.AudioEncoder.HE_AAC;
         }
@@ -210,7 +210,7 @@ public class CallRecorderService extends Service {
         }
 
         int audioFormat = getAudioFormat();
-        if (audioFormat == MediaRecorder.OutputFormat.AMR_WB) {
+        if (audioFormat == MediaRecorder.OutputFormat.AMR_NB) {
             return number + "_" + timestamp + ".amr";
         } else {
             return number + "_" + timestamp + ".m4a ";
