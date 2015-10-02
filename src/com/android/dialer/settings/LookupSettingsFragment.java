@@ -157,7 +157,7 @@ public class LookupSettingsFragment extends PreferenceFragment
         mEnableReverseLookup.setChecked(Settings.System.getInt(cr,
                 Settings.System.ENABLE_REVERSE_LOOKUP, 1) != 0);
         if (SudaUtils.isSupportLanguage(true)) {
-            mEnableReverseLookup.setChecked(Settings.System.getInt(cr,
+            mEnableCloudMark.setChecked(Settings.System.getInt(cr,
                     Settings.System.USE_CLOUD_MARK, 0) != 0);
         }
     }
