@@ -28,6 +28,8 @@ import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
 
+import android.suda.utils.SudaUtils;
+
 import com.android.dialer.R;
 
 import java.util.Arrays;
@@ -38,6 +40,7 @@ public class LookupSettingsFragment extends PreferenceFragment
     private static final String KEY_ENABLE_FORWARD_LOOKUP = "enable_forward_lookup";
     private static final String KEY_ENABLE_PEOPLE_LOOKUP = "enable_people_lookup";
     private static final String KEY_ENABLE_REVERSE_LOOKUP = "enable_reverse_lookup";
+    private static final String KEY_ENABLE_USE_CLOUD_MARK = "enable_use_cloud_mark";
     private static final String KEY_FORWARD_LOOKUP_PROVIDER = "forward_lookup_provider";
     private static final String KEY_PEOPLE_LOOKUP_PROVIDER = "people_lookup_provider";
     private static final String KEY_REVERSE_LOOKUP_PROVIDER = "reverse_lookup_provider";
@@ -45,6 +48,7 @@ public class LookupSettingsFragment extends PreferenceFragment
     private SwitchPreference mEnableForwardLookup;
     private SwitchPreference mEnablePeopleLookup;
     private SwitchPreference mEnableReverseLookup;
+    private SwitchPreference mEnableCloudMark;
     private ListPreference mForwardLookupProvider;
     private ListPreference mPeopleLookupProvider;
     private ListPreference mReverseLookupProvider;
@@ -58,10 +62,12 @@ public class LookupSettingsFragment extends PreferenceFragment
         mEnableForwardLookup = (SwitchPreference) findPreference(KEY_ENABLE_FORWARD_LOOKUP);
         mEnablePeopleLookup = (SwitchPreference) findPreference(KEY_ENABLE_PEOPLE_LOOKUP);
         mEnableReverseLookup = (SwitchPreference) findPreference(KEY_ENABLE_REVERSE_LOOKUP);
+        mEnableCloudMark = (SwitchPreference) findPreference(KEY_ENABLE_USE_CLOUD_MARK);
 
         mEnableForwardLookup.setOnPreferenceChangeListener(this);
         mEnablePeopleLookup.setOnPreferenceChangeListener(this);
         mEnableReverseLookup.setOnPreferenceChangeListener(this);
+        mEnableCloudMark.setOnPreferenceChangeListener(this);
 
         mForwardLookupProvider = (ListPreference) findPreference(KEY_FORWARD_LOOKUP_PROVIDER);
         mPeopleLookupProvider = (ListPreference) findPreference(KEY_PEOPLE_LOOKUP_PROVIDER);
@@ -71,6 +77,9 @@ public class LookupSettingsFragment extends PreferenceFragment
         mPeopleLookupProvider.setOnPreferenceChangeListener(this);
         mReverseLookupProvider.setOnPreferenceChangeListener(this);
 
+        if (!SudaUtils.isSupportLanguage(true)) {
+            getPreferenceScreen().removePreference(findPreference(KEY_ENABLE_USE_CLOUD_MARK));
+        }
         updateReverseLookupProviderList();
     }
 
@@ -91,6 +100,9 @@ public class LookupSettingsFragment extends PreferenceFragment
                     ((Boolean) newValue) ? 1 : 0);
         } else if (preference == mEnablePeopleLookup) {
             Settings.System.putInt(cr, Settings.System.ENABLE_PEOPLE_LOOKUP,
+                    ((Boolean) newValue) ? 1 : 0);
+        } else if (preference == mEnableCloudMark) {
+            Settings.System.putInt(cr, Settings.System.USE_CLOUD_MARK,
                     ((Boolean) newValue) ? 1 : 0);
         } else if (preference == mEnableReverseLookup) {
             Settings.System.putInt(cr, Settings.System.ENABLE_REVERSE_LOOKUP,
@@ -144,6 +156,10 @@ public class LookupSettingsFragment extends PreferenceFragment
                 Settings.System.ENABLE_PEOPLE_LOOKUP, 1) != 0);
         mEnableReverseLookup.setChecked(Settings.System.getInt(cr,
                 Settings.System.ENABLE_REVERSE_LOOKUP, 1) != 0);
+        if (!SudaUtils.isSupportLanguage(true)) {
+            mEnableReverseLookup.setChecked(Settings.System.getInt(cr,
+                    Settings.System.USE_CLOUD_MARK, 0) != 0);
+        }
     }
 
     private void restoreLookupProviders() {

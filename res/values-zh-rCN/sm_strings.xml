@@ -32,4 +32,6 @@
   <string name="cloud_location_lookup_mark_delivery">物流快递</string>
   <string name="cloud_location_lookup_mark_service">客服电话</string>
   <string name="cloud_location_lookup_mark_taxi">出租车司机</string>
+  <string name="use_cloud_mark">来去电云归属</string>
+  <string name="use_cloud_mark_summary">来去电时先通过网络查询归属，可能会造成延时</string>
 </resources>
