@@ -41,7 +41,9 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
     com.android.services.telephony.common \
     com.android.vcard \
     guava \
-    libphonenumber
+    libphonenumber \
+    libSudaPinYin \
+    libSudaLocation
 
 LOCAL_PACKAGE_NAME := Dialer
 LOCAL_CERTIFICATE := shared
