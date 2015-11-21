@@ -47,6 +47,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -67,13 +68,17 @@ public class DialerDatabaseHelper extends SQLiteOpenHelper {
     private static final AtomicBoolean sInUpdate = new AtomicBoolean(false);
     private final Context mContext;
 
+    private Class mMultiMatchClass;
+    private Object mMultiMatchObject;
+    private Method mMultiMatchMethod;
+
     /**
      * SmartDial DB version ranges:
      * <pre>
      *   0-98   KitKat
      * </pre>
      */
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 70004;
     public static final String DATABASE_NAME = "dialer.db";
 
     /**
@@ -83,7 +88,7 @@ public class DialerDatabaseHelper extends SQLiteOpenHelper {
     private static final String LAST_UPDATED_MILLIS = "last_updated_millis";
     private static final String DATABASE_VERSION_PROPERTY = "database_version";
 
-    private static final int MAX_ENTRIES = 20;
+    private static final int MAX_ENTRIES = 40;
 
     public interface Tables {
         /** Saves the necessary smart dial information of all contacts. */
@@ -346,6 +351,33 @@ public class DialerDatabaseHelper extends SQLiteOpenHelper {
         mContext = Preconditions.checkNotNull(context, "Context must not be null");
     }
 
+    private void initMultiLanguageSearch() {
+        try {
+            if (mMultiMatchClass == null) {
+                mMultiMatchClass = Class
+                        .forName("com.qualcomm.qti.smartsearch.SmartMatch");
+                Log.d(TAG, "create multi match success");
+            }
+            if (mMultiMatchObject == null && mMultiMatchClass != null) {
+                mMultiMatchObject = mMultiMatchClass.newInstance();
+            }
+            if (mMultiMatchMethod == null && mMultiMatchClass != null) {
+                mMultiMatchMethod = mMultiMatchClass.getDeclaredMethod(
+                        "getMatchStringIndex", String.class, String.class,
+                        int.class);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public Object getMultiMatchObject() {
+        return mMultiMatchObject;
+    }
+
+    public Method getMultiMatchMethod() {
+        return mMultiMatchMethod;
+    }
+
     /**
      * Creates tables in the database when database is created for the first time.
      *
@@ -409,7 +441,10 @@ public class DialerDatabaseHelper extends SQLiteOpenHelper {
             Log.e(TAG, "Malformed database version..recreating database");
         }
 
-        if (oldVersion < 4) {
+        int base = 70000;
+        db.execSQL("DROP TABLE IF EXISTS " + "cached_number_contacts");
+        if (oldVersion <= (DATABASE_VERSION - base)
+                || (oldVersion >= base && oldVersion < DATABASE_VERSION)) {
             setupTables(db);
             return;
         }
@@ -517,6 +552,48 @@ public class DialerDatabaseHelper extends SQLiteOpenHelper {
             super.onPostExecute(o);
         }
     }
+
+    /**
+     * Deletes all smart dial data and recreates it from contacts
+     */
+    public void recreateSmartDialDatabaseInBackground() { new SmartDialRecreateAsyncTask().execute(); }
+
+    private class SmartDialRecreateAsyncTask extends AsyncTask {
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            if (DEBUG) {
+                Log.v(TAG, "Recreating database");
+            }
+
+            // reset last updated so that we query for all contacts
+            resetSmartDialLastUpdatedTime();
+
+            // clear all contacts
+            final SQLiteDatabase db = getWritableDatabase();
+            removeAllContacts(db);
+
+            // repopulate
+            updateSmartDialDatabase();
+            return null;
+        }
+
+        @Override
+        protected void onCancelled() {
+            if (DEBUG) {
+                Log.v(TAG, "Recreate Cancelled");
+            }
+            super.onCancelled();
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            if (DEBUG) {
+                Log.v(TAG, "Recreate Finished");
+            }
+            super.onPostExecute(o);
+        }
+    }
+
     /**
      * Removes rows in the smartdial database that matches the contacts that have been deleted
      * by other apps since last update.
@@ -755,6 +832,8 @@ public class DialerDatabaseHelper extends SQLiteOpenHelper {
      * update.
      */
     public void updateSmartDialDatabase() {
+        initMultiLanguageSearch();
+
         final SQLiteDatabase db = getWritableDatabase();
 
         synchronized(mLock) {
@@ -922,7 +1001,7 @@ public class DialerDatabaseHelper extends SQLiteOpenHelper {
         final SQLiteDatabase db = getReadableDatabase();
 
         /** Uses SQL query wildcard '%' to represent prefix matching.*/
-        final String looseQuery = query + "%";
+        //final String looseQuery = query + "%";
 
         final ArrayList<ContactNumber> result = Lists.newArrayList();
 
@@ -938,12 +1017,7 @@ public class DialerDatabaseHelper extends SQLiteOpenHelper {
                 SmartDialDbColumns.NUMBER + ", " +
                 SmartDialDbColumns.CONTACT_ID + ", " +
                 SmartDialDbColumns.LOOKUP_KEY +
-                " FROM " + Tables.SMARTDIAL_TABLE + " WHERE " +
-                SmartDialDbColumns.CONTACT_ID + " IN " +
-                    " (SELECT " + PrefixColumns.CONTACT_ID +
-                    " FROM " + Tables.PREFIX_TABLE +
-                    " WHERE " + Tables.PREFIX_TABLE + "." + PrefixColumns.PREFIX +
-                    " LIKE '" + looseQuery + "')" +
+                " FROM " + Tables.SMARTDIAL_TABLE +
                 " ORDER BY " + SmartDialSortingOrder.SORT_ORDER,
                 new String[] {currentTimeStamp});
         if (cursor == null) {

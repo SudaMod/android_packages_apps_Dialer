@@ -18,8 +18,12 @@ res_dirs := res \
     $(phone_common_dir)/res
 
 LOCAL_SRC_FILES := $(call all-java-files-under, $(src_dirs))
+LOCAL_SRC_FILES += ../../providers/ContactsProvider/src/com/android/providers/contacts/NameSplitter.java \
+                   ../../providers/ContactsProvider/src/com/android/providers/contacts/HanziToPinyin.java \
+                   ../../providers/ContactsProvider/src/com/android/providers/contacts/util/NeededForTesting.java
 LOCAL_RESOURCE_DIR := $(addprefix $(LOCAL_PATH)/, $(res_dirs)) \
     frameworks/support/v7/cardview/res frameworks/support/v7/recyclerview/res
+LOCAL_ASSET_DIR += $(LOCAL_PATH)/assets
 
 LOCAL_AAPT_FLAGS := \
     --auto-add-overlay \
@@ -30,7 +34,8 @@ LOCAL_AAPT_FLAGS := \
     --extra-packages com.android.phone.common
 
 LOCAL_JAVA_LIBRARIES := telephony-common \
-                        ims-common
+                        ims-common \
+                        org.apache.http.legacy
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
     android-common \
@@ -43,7 +48,8 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
     guava \
     libphonenumber \
     libSudaPinYin \
-    libSudaLocation
+    libSudaLocation \
+    org.cyanogenmod.platform.sdk
 
 LOCAL_PACKAGE_NAME := Dialer
 LOCAL_CERTIFICATE := shared
