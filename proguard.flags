@@ -19,3 +19,7 @@
 -keep class android.support.design.widget.AppBarLayout$ScrollingViewBehavior { *; }
 
 -verbose
+
+-dontwarn org.apache.http.**
+-dontwarn com.android.volley.toolbox.**
+-dontwarn android.net.http.**
