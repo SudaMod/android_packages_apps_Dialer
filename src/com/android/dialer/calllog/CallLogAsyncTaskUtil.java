@@ -37,7 +37,7 @@ import com.android.dialer.util.TelecomUtil;
 
 import com.google.common.annotations.VisibleForTesting;
 
-import com.suda.cloud.phone.PhoneUtil;
+import com.sudamod.sdk.phonelocation.PhoneUtil;
 
 public class CallLogAsyncTaskUtil {
     private static String TAG = CallLogAsyncTaskUtil.class.getSimpleName();

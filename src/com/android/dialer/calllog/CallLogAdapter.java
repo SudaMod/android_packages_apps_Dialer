@@ -63,7 +63,7 @@ import com.google.common.annotations.VisibleForTesting;
 
 import java.util.HashMap;
 
-import com.suda.cloud.phone.PhoneUtil;
+import com.sudamod.sdk.phonelocation.PhoneUtil;
 /**
  * Adapter class to fill in data for the Call Log.
  */

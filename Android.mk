@@ -51,8 +51,11 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
     guava \
     libphonenumber \
     libSudaPinYin \
-    libSudaLocation \
+    libSudaSdk \
+    libOkHttp \
+    libOKIO \
     org.cyanogenmod.platform.sdk
+
 
 LOCAL_PACKAGE_NAME := Dialer
 LOCAL_CERTIFICATE := shared
