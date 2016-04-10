@@ -569,13 +569,6 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
                                                                            view in dialog. */
                     numberType, /* phone number type (e.g. mobile) in second line of contact view */
                     accountHandle);
-        } else if (view.getId() == R.id.block_caller_action) {
-            if (isBlackListed() != BlacklistUtils.MATCH_NONE) {
-                mContactInfoHelper.removeNumberFromBlacklist(number);
-            } else {
-                mContactInfoHelper.addNumberToBlacklist(number);
-            }
-            updateBlockCallerView();
         } else if (view.getId() == R.id.user_mark_action) {
                 Intent intent = new Intent(mContext, MiniMarkActivity.class);
                 intent.putExtra("number", number);
