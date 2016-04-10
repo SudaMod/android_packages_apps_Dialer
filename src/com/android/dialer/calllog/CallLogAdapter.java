@@ -301,7 +301,6 @@ public class CallLogAdapter extends GroupingListAdapter
         this.notifyDataSetChanged();
     }
 
-
     public CallLogAdapter(
             Context context,
             CallFetcher callFetcher,
