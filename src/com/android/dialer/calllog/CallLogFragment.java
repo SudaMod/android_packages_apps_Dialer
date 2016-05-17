@@ -171,6 +171,7 @@ public class CallLogFragment extends Fragment implements CallLogQueryHandler.Lis
                 public void onResult(DeepLink.BooleanResult result) {
                     boolean value = result.getResults();
                     if (isDeepLinkApiEnabled != value) {
+                        mAdapter.mDeepLinkCache.clearCache();
                         refreshData();
                     }
                     isDeepLinkApiEnabled = value;
@@ -255,7 +256,6 @@ public class CallLogFragment extends Fragment implements CallLogQueryHandler.Lis
                 mVoicemailPlaybackPresenter,
                 mBlockContactPresenter,
                 isShowingRecentsTab);
-        areDeepLinkEnabled();
     }
 
     /** Called by the CallLogQueryHandler when the list of calls has been fetched or updated. */
@@ -348,7 +348,7 @@ public class CallLogFragment extends Fragment implements CallLogQueryHandler.Lis
                 }
             }
         });
-
+        areDeepLinksEnabled();
         fetchCalls();
         return view;
     }
@@ -388,8 +388,7 @@ public class CallLogFragment extends Fragment implements CallLogQueryHandler.Lis
             refreshData();
             mAdapter.startCache();
         }
-
-        areDeepLinkEnabled();
+        areDeepLinksEnabled();
     }
 
     @Override
@@ -444,8 +443,10 @@ public class CallLogFragment extends Fragment implements CallLogQueryHandler.Lis
 
     @Override
     public void onStatusChanged(boolean enabled) {
-        mRefreshDataRequired = true;
-        refreshData();
+        // reset and start the ContactInfo cache
+        mAdapter.invalidateCache();
+        mAdapter.startCache();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -525,7 +526,7 @@ public class CallLogFragment extends Fragment implements CallLogQueryHandler.Lis
         }
     }
 
-    private void areDeepLinkEnabled() {
+    private void areDeepLinksEnabled() {
         DeepLinkIntegrationManager.getInstance().isApplicationTypeEnabled(
                 DeepLinkApplicationType.NOTE, mDeepLinkEnabledCallback);
     }
