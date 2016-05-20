@@ -52,6 +52,8 @@ import com.cyanogen.lookup.phonenumber.response.StatusCode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Locale;
+
 /**
  * Utility class to look up the contact information for a given number.
  */
@@ -226,7 +228,7 @@ public class ContactInfoHelper {
                             info.photoId = phonesCursor.getLong(
                                     phonesCursor.getColumnIndexOrThrow("photo_id"));
                             info.photoUri = UriUtils.parseUriOrNull(phonesCursor.getString(
-                                    phonesCursor.getColumnIndexOrThrow("photo_file_id")));
+                                    phonesCursor.getColumnIndexOrThrow("photo_uri")));
                         } catch (IllegalArgumentException e) {
                             Log.e(TAG, "Contact information invalid, cannot find needed column(s)",
                                     e);
@@ -340,12 +342,29 @@ public class ContactInfoHelper {
                     contactInfo.spamCount = response.mSpamCount;
                     contactInfo.attributionDrawable = response.mAttributionLogo;
 
+                    StringBuilder succinctLocation = new StringBuilder();
+                    // convert country code to country name
+                    String country = new Locale("", response.mCountry).getDisplayCountry();
+
+                    if (!TextUtils.isEmpty(response.mCity)) {
+                        succinctLocation.append(response.mCity);
+                    }
+                    if (!TextUtils.isEmpty(country)) {
+                        if (succinctLocation.length() > 0) {
+                            succinctLocation.append(", ");
+                        }
+                        succinctLocation.append(country);
+                    }
+                    contactInfo.label = succinctLocation.toString();
+
                     // construct encoded lookup uri
                     ContactBuilder contactBuilder = new ContactBuilder(ContactBuilder.REVERSE_LOOKUP,
                             response.mNumber, formattedNumber);
                     contactBuilder.setInfoProviderName(response.mProviderName);
                     contactBuilder.setPhotoUrl(response.mPhotoUrl);
                     contactBuilder.setName(ContactBuilder.Name.createDisplayName(response.mName));
+                    contactBuilder.setIsSpam(response.mIsSpam);
+                    contactBuilder.setSpamCount(response.mSpamCount);
 
                     contactInfo.lookupUri = contactBuilder.build().lookupUri;
                     info = contactInfo;
