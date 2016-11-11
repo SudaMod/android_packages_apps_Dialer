@@ -67,8 +67,6 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
     libphonenumber \
     libSudaPinYin \
     libSudaSdk \
-    libOkHttp \
-    libOKIO \
     org.cyanogenmod.platform.sdk \
     picasso-dialer \
     uicommon
