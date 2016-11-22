@@ -31,4 +31,7 @@
   <string name="preference_category_t9_dialpad_search">拨号盘 T9 搜索</string>
   <string name="t9_search_input_locale">T9 搜索输入</string>
   <string name="t9_search_input_locale_default">默认</string>
+  <!-- Automatically call recording -->
+  <string name="call_recording_automatically_title">自动录音</string>
+  <string name="call_recording_automatically_summary">接通电话后自动录音</string>
 </resources>

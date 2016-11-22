@@ -38,4 +38,8 @@
     <string name="t9_search_input_locale">T9 search input</string>
     <string name="t9_search_input_locale_default">Default</string>
 
+    <!-- Automatically call recording -->
+    <string name="call_recording_automatically_key" translatable="false">call_recording_automatically</string>
+    <string name="call_recording_automatically_title">Recording automatically</string>
+    <string name="call_recording_automatically_summary">Recording automatically after call</string>
 </resources>
