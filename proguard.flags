@@ -26,6 +26,7 @@
 -dontwarn android.net.http.**
 -dontwarn java.nio.file.**
 -dontwarn org.codehaus.mojo.**
+-dontwarn okio.**
 
 -keep public class cyanogenmod.app.StatusBarPanelCustomTile
 -keep public class cyanogenmod.app.CustomTile
