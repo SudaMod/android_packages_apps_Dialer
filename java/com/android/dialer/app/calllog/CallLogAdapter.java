@@ -86,6 +86,7 @@ import com.android.dialer.phonenumbercache.ContactInfoHelper;
 import com.android.dialer.phonenumberutil.PhoneNumberHelper;
 import com.android.dialer.spam.Spam;
 import com.android.dialer.util.PermissionsUtil;
+import com.sudamod.sdk.phonelocation.PhoneUtil;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -751,7 +752,7 @@ public class CallLogAdapter extends GroupingListAdapter
     details.date = cursor.getLong(CallLogQuery.DATE);
     details.duration = cursor.getLong(CallLogQuery.DURATION);
     details.features = getCallFeatures(cursor, count);
-    details.geocode = cursor.getString(CallLogQuery.GEOCODED_LOCATION);
+    details.geocode = PhoneUtil.getPhoneUtil(mActivity).getLocalNumberInfo(number);
     details.transcription = cursor.getString(CallLogQuery.TRANSCRIPTION);
     details.callTypes = getCallTypes(cursor, count);
 

@@ -45,6 +45,8 @@ import android.os.Build.VERSION_CODES;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.suda.location.PhoneLocation;
+import android.suda.utils.SudaUtils;
 import android.support.annotation.RequiresPermission;
 import android.support.annotation.StringRes;
 import android.support.annotation.VisibleForTesting;
@@ -572,13 +574,26 @@ public class StatusBarNotifier
     String preferredName =
         ContactDisplayUtils.getPreferredDisplayName(
             contactInfo.namePrimary, contactInfo.nameAlternative, mContactsPreferences);
-    if (TextUtils.isEmpty(preferredName)) {
-      return TextUtils.isEmpty(contactInfo.number)
-          ? null
-          : BidiFormatter.getInstance()
-              .unicodeWrap(contactInfo.number, TextDirectionHeuristics.LTR);
-    }
-    return preferredName;
+
+    if (SudaUtils.isSupportLanguage(true)) {
+         String location = PhoneLocation.getCityFromPhone(contactInfo.number);
+
+            if (TextUtils.isEmpty(preferredName)) {
+                if (!TextUtils.isEmpty(location)) {
+                    return contactInfo.number + " " + location;
+                }
+                return contactInfo.number;
+            }
+            return !TextUtils.isEmpty(location) ? preferredName + " " + location : preferredName;
+      } else {
+           if (TextUtils.isEmpty(preferredName)) {
+              return TextUtils.isEmpty(contactInfo.number)
+                  ? null
+                  : BidiFormatter.getInstance()
+                      .unicodeWrap(contactInfo.number, TextDirectionHeuristics.LTR);
+         }
+         return preferredName;
+      }
   }
 
   private void addPersonReference(
