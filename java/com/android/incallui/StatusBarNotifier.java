@@ -45,7 +45,7 @@ import android.os.Build.VERSION_CODES;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.suda.location.PhoneLocation;
+import com.sudamod.sdk.phonelocation.PhoneUtil;
 import android.suda.utils.SudaUtils;
 import android.support.annotation.RequiresPermission;
 import android.support.annotation.StringRes;
@@ -576,7 +576,7 @@ public class StatusBarNotifier
             contactInfo.namePrimary, contactInfo.nameAlternative, mContactsPreferences);
 
     if (SudaUtils.isSupportLanguage(true)) {
-         String location = PhoneLocation.getCityFromPhone(contactInfo.number);
+         String location = PhoneUtil.getPhoneUtil(mContext).getLocalNumberInfo(contactInfo.number);
 
             if (TextUtils.isEmpty(preferredName)) {
                 if (!TextUtils.isEmpty(location)) {
