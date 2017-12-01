@@ -264,8 +264,8 @@ public class ContactInfoCache implements OnImageLoadCompleteListener {
 
         String location = PhoneUtil.getPhoneUtil(context).getLocalNumberInfo(cce.number, false);
         if (!TextUtils.isEmpty(location)) {
-            info.cnapName = location;
-            cce.location = info.cnapName;
+            info.name = location;
+            cce.location = info.name;
         } else {
             cce.location = info.geoDescription;
         }
