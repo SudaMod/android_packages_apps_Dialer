@@ -20,7 +20,6 @@
          and other settings UIs. -->
   <string name="phoneAppLabel" product="default">Ffôn</string>
   <!-- Official label for the in-call UI. DO NOT TRANSLATE. -->
-  <string name="inCallLabel" translate="false">InCallUI</string>
   <!-- Call status -->
   <!-- In-call screen: status label for a call that's on hold -->
   <string name="onHold">Yn disgwyl</string>
@@ -223,6 +222,7 @@
   <!-- In-call screen: message displayed in an error dialog -->
   <string name="incall_error_supp_service_unknown">Gwasanaeth heb ei gefnogi.</string>
   <!-- In-call screen: message displayed in an error dialog -->
+  <string name="incall_error_supp_service_switch">Methu newid rhwng galwadau.</string>
   <!-- In-call screen: message displayed in an error dialog -->
   <string name="incall_error_supp_service_separate">Methu gwahanu\'r alwad.</string>
   <!-- In-call screen: message displayed in an error dialog -->
@@ -441,7 +441,7 @@
   <string name="profile_photo_description">Llun proffil</string>
   <!-- Description of the "camera off" icon displayed when the device's camera is disabled during
          a video call. [CHAR LIMIT=NONE] -->
-  <string name="camera_off_description">Camera ffwrdd</string>
+  <string name="camera_off_description">Camera i ffwrdd</string>
   <!-- Used to inform the user that a call was received via a number other than the primary
         phone number associated with their device. [CHAR LIMIT=16] -->
   <string name="child_number">trwy <xliff:g id="child_number" example="650-555-1212">%s</xliff:g></string>
