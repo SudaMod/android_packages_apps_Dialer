@@ -45,4 +45,7 @@
   <dimen name="shadow_length">10dp</dimen>
 
   <dimen name="barcode_height">100dp</dimen>
+  <dimen name="dialpad_location_adjustable_text_size">@dimen/dialpad_location_text_size</dimen>
+  <dimen name="dialpad_location_text_size">13sp</dimen>
+  <dimen name="dialpad_location_text_min_size">9sp</dimen>
 </resources>

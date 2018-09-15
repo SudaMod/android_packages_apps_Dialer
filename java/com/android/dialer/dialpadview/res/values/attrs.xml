@@ -27,6 +27,7 @@
     <attr format="dimension" name="dialpad_key_letters_size_for_single_alphabet"/>
     <attr format="dimension" name="dialpad_key_numbers_size"/>
     <attr format="dimension" name="dialpad_key_number_margin_bottom"/>
+    <attr format="dimension" name="dialpad_location_adjustable_text_size"/>
   </declare-styleable>
 
   <declare-styleable name="Theme.Dialpad">

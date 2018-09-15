@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.provider.CallLog.Calls;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.support.v4.content.ContextCompat;
+import android.suda.utils.SudaUtils;
 import android.telecom.PhoneAccount;
 import android.telecom.PhoneAccountHandle;
 import android.text.SpannableString;
@@ -456,7 +457,7 @@ public class PhoneCallDetailsHelper
         && !PhoneNumberHelper.isUriNumber(details.number.toString())
         && !callLogCache.isVoicemailNumber(details.accountHandle, details.number)) {
 
-      if (shouldShowLocation(details)) {
+      if (shouldShowLocation(details) && SudaUtils.isSupportLanguage(true)) {
         numberFormattedLabel = details.geocode;
       } else if (!(details.numberType == Phone.TYPE_CUSTOM
           && TextUtils.isEmpty(details.numberLabel))) {
@@ -485,7 +486,7 @@ public class PhoneCallDetailsHelper
     }
     // Don't bother showing geo location for contacts.
     if (!TextUtils.isEmpty(details.namePrimary)) {
-      return false;
+      return true;
     }
     return true;
   }

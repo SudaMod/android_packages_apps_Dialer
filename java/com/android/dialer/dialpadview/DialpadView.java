@@ -81,6 +81,7 @@ public class DialpadView extends LinearLayout {
   private final boolean isRtl; // whether the dialpad is shown in a right-to-left locale
   private final int translateDistance;
 
+  private TextView location;
   private EditText digits;
   private ImageButton delete;
   private View overflowMenuButton;
@@ -134,6 +135,7 @@ public class DialpadView extends LinearLayout {
 
     setupKeypad();
     digits = (EditText) findViewById(R.id.digits);
+    location = (TextView) findViewById(R.id.location);
     delete = (ImageButton) findViewById(R.id.deleteButton);
     overflowMenuButton = findViewById(R.id.dialpad_overflow);
     rateContainer = (ViewGroup) findViewById(R.id.rate_container);
@@ -309,6 +311,10 @@ public class DialpadView extends LinearLayout {
 
   public EditText getDigits() {
     return digits;
+  }
+
+  public TextView getLocation() {
+    return location;
   }
 
   public ImageButton getDeleteButton() {

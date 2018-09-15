@@ -37,6 +37,8 @@ import com.android.dialer.common.Assert;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import org.chinese.pinyin.PinyinHelper;
+
 /**
  * A drawable that encapsulates all the functionality needed to display a letter tile to represent a
  * contact image.
@@ -229,6 +231,25 @@ public class LetterTileDrawable extends Drawable {
           bounds.centerX(),
           bounds.centerY() + offset * bounds.height() - rect.exactCenterY(),
           paint);
+        } else if (letter != null && PinyinHelper.matchesCheck(letter)) {
+            // Draw letter or digit.
+            firstChar[0] = letter;
+
+            // Scale text by canvas bounds and user selected scaling factor
+            paint.setTextSize(scale * letterToTileRatio * minDimension * 0.8f);
+            //sPaint.setTextSize(sTileLetterFontSize);
+			paint.getTextBounds(firstChar, 0, 1, rect);
+            paint.setColor(tileFontColor);
+
+            // Draw the letter in the canvas, vertically shifted up or down by the user-defined
+            // offset
+      canvas.drawText(
+          firstChar,
+          0,
+          1,
+          bounds.centerX(),
+          bounds.centerY() * 0.9f + offset * bounds.height() + rect.height() / 2,
+          paint);
     } else {
       // Draw the default image if there is no letter/digit to be drawn
       Drawable drawable = getDrawableForContactType(contactType);
@@ -335,7 +356,8 @@ public class LetterTileDrawable extends Drawable {
 
   private LetterTileDrawable setLetterAndColorFromContactDetails(
       final String displayName, final String identifier) {
-    if (!TextUtils.isEmpty(displayName) && isEnglishLetter(displayName.charAt(0))) {
+    if (displayName != null && displayName.length() > 0
+	    && (!TextUtils.isEmpty(displayName) && isEnglishLetter(displayName.charAt(0)) || PinyinHelper.matchesCheck(displayName.charAt(0)))) {
       letter = Character.toUpperCase(displayName.charAt(0));
     } else {
       letter = null;
